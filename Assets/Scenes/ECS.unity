@@ -623,8 +623,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5210706799237880616, guid: 558a3168b9bab934394496ccda57de9d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1113990432}
   m_SourcePrefab: {fileID: 100100000, guid: 558a3168b9bab934394496ccda57de9d, type: 3}
+--- !u!1 &1113990425 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5210706799237880616, guid: 558a3168b9bab934394496ccda57de9d, type: 3}
+  m_PrefabInstance: {fileID: 1109032708}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1113990432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113990425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8a839f33174572409b0df7d8184add5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 1113990425}
+  isMovableEnemy: 1
+  baseMoveSpeed: 3
 --- !u!1001 &1460334601
 PrefabInstance:
   m_ObjectHideFlags: 0
