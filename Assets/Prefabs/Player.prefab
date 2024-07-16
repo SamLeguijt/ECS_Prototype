@@ -42,9 +42,7 @@ GameObject:
   - component: {fileID: 590101839256205747}
   - component: {fileID: 2137335957823821468}
   - component: {fileID: 5208979310353833358}
-  - component: {fileID: 5493368778917532705}
-  - component: {fileID: 527834216556495013}
-  - component: {fileID: 5501537342817607270}
+  - component: {fileID: 3257461365013702386}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -84,7 +82,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -114,12 +112,12 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
---- !u!114 &5493368778917532705
+--- !u!114 &3257461365013702386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,33 +126,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1180064263533414388}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3e8681c5ed4864b9e8d57d82e70f5a, type: 3}
+  m_Script: {fileID: 11500000, guid: afbdfbe97440c21438469e87d97f0da2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &527834216556495013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1180064263533414388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a910a31f90baaf6409cbda7868377b10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5501537342817607270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1180064263533414388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 080fd6353a257f549b48d5cec3fa5408, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  rb: {fileID: 5208979310353833358}
+  moveSpeed: 5
 --- !u!1 &2530262280636727253
 GameObject:
   m_ObjectHideFlags: 0
