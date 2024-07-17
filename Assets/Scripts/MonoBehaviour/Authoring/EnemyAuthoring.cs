@@ -6,7 +6,10 @@ public class EnemyAuthoring : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private bool isMovableEnemy = true;
-    [SerializeField] private float baseMoveSpeed = 3f;
+    [SerializeField] private float baseMoveSpeed = 5f;
+    [SerializeField] private float movementThreshold = 20f;
+    [SerializeField] private float rotateThreshold = 25f;
+    [SerializeField] private float stoppingDistance = 1f;
 
     // Baker class should be nested inside the Authoring (MonoBehaviour) class.
     public class EnemyPrefabBaker : Baker<EnemyAuthoring>
@@ -29,7 +32,12 @@ public class EnemyAuthoring : MonoBehaviour
             if (authoring.isMovableEnemy)
             {
                 // We set the movementspeed of the component to our authoring' s base speed, which is specified in the inspector.
-                FollowTargetComponent followComponent = new FollowTargetComponent { MovementSpeed = authoring.baseMoveSpeed };
+                FollowTargetComponent followComponent = new FollowTargetComponent { 
+                    MovementSpeed = authoring.baseMoveSpeed, 
+                    MoveDistanceThreshold = authoring.movementThreshold, 
+                    RotateDistanceThreshold = authoring.rotateThreshold,
+                    StoppingDistance = authoring.stoppingDistance,
+                };
 
                 AddComponent(enemyEntity, followComponent);
             }
