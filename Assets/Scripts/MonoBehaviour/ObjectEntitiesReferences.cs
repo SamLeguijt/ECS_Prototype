@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
+using Unity.Collections;
+using Unity.Transforms;
 
 public class ObjectEntitiesReferences : MonoBehaviour
 {
@@ -11,14 +13,17 @@ public class ObjectEntitiesReferences : MonoBehaviour
 
     public const string PLAYER_ENTITY_NAME = "PlayerEntity";
 
-    
+
     /* PROPERTIES */
-    
+
     public Dictionary<string, Entity> EntityReferences { get; private set; } = new Dictionary<string, Entity>();
 
-    public GameObject PlayerGO { get; private set; }
+    [field: SerializeField] public GameObject PlayerGO { get; private set; }
     public Entity PlayerEntity { get; private set; }
 
+    /* FIELDS */
+
+    private EntityManager entityManager;
 
     private void Awake()
     {
@@ -32,6 +37,13 @@ public class ObjectEntitiesReferences : MonoBehaviour
             Instance = this;
 
         DontDestroyOnLoad(Instance);
+
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+    }
+
+    private void Start()
+    {
+        CreatePlayerEntity();
     }
 
     /// <summary>
@@ -40,17 +52,38 @@ public class ObjectEntitiesReferences : MonoBehaviour
     /// </summary>
     /// <param name="relatedEntity"></param>
     /// <param name="customEntityName"></param>
-    private void AddToDictionary(string enityNameKey , Entity relatedEntityValue)
+    private void AddToDictionary(string enityNameKey, Entity relatedEntityValue, bool overrideCurrent = false)
     {
-        if (!EntityReferences.ContainsKey(enityNameKey))
-            EntityReferences.Add(enityNameKey, relatedEntityValue);
+        if (EntityReferences.ContainsKey(enityNameKey))
+        {
+            if (!overrideCurrent)
+                return;
+            else
+            {
+                EntityReferences.Remove(enityNameKey);
+            }
+        }
+
+        EntityReferences.Add(enityNameKey, relatedEntityValue);
     }
 
-    public void SetPlayer(GameObject playerObject, Entity playerEntity)
+    public void SetPlayerEntity(Entity playerEntity, bool overrideCurrentPlayer = false)
     {
-        PlayerGO = playerObject; 
         PlayerEntity = playerEntity;
 
-        AddToDictionary(PLAYER_ENTITY_NAME, PlayerEntity);
+        AddToDictionary(PLAYER_ENTITY_NAME, PlayerEntity, overrideCurrentPlayer);
+    }
+
+    private void CreatePlayerEntity()
+    {
+        if (PlayerGO != null)
+        {
+            Entity playerEntity = entityManager.CreateSingleton<PlayerTag>();
+
+            entityManager.AddComponentData(playerEntity, new EntityCustomNameComponent { Name = PLAYER_ENTITY_NAME });
+            entityManager.AddComponentData(playerEntity, new LocalTransform { } );
+
+            SetPlayerEntity(playerEntity, true);
+        }
     }
 }
