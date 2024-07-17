@@ -1,5 +1,6 @@
-/*using Unity.Entities;
+using Unity.Entities;
 using UnityEngine;
+
 
 public class EnemyAuthoring : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class EnemyAuthoring : MonoBehaviour
             if (authoring.isMovableEnemy)
             {
                 // We set the movementspeed of the component to our authoring' s base speed, which is specified in the inspector.
-                FollowTargetComponent followComponent = new FollowTargetComponent { MovementSpeed = authoring.baseMoveSpeed} ;
+                FollowTargetComponent followComponent = new FollowTargetComponent { MovementSpeed = authoring.baseMoveSpeed };
 
                 AddComponent(enemyEntity, followComponent);
             }
@@ -39,4 +40,3 @@ public class EnemyAuthoring : MonoBehaviour
         }
     }
 }
-*/

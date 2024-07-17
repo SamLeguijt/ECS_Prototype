@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     // Dev settings bools.
-    public bool AllowMovement { get; set; } = true;
-    public bool AllowRotation { get; set; } = true;
+    [field:SerializeField] public bool AllowMovement { get; set; } = true;
+    [field: SerializeField] public bool AllowRotation { get; set; } = true;
 
     [SerializeField] private Rigidbody rb = null;
     [SerializeField] private float moveSpeed = 8f;

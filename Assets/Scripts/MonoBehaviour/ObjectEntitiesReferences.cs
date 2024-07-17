@@ -82,6 +82,7 @@ public class ObjectEntitiesReferences : MonoBehaviour
 
             entityManager.AddComponentData(playerEntity, new EntityCustomNameComponent { Name = PLAYER_ENTITY_NAME });
             entityManager.AddComponentData(playerEntity, new LocalTransform { } );
+            entityManager.AddComponentData(playerEntity, new MirrorGameObjectComponent { targetGameObject = PlayerGO });
 
             SetPlayerEntity(playerEntity, true);
         }
