@@ -22,8 +22,7 @@ public class EnemyAuthoring : MonoBehaviour
                 transformFlags = TransformUsageFlags.Renderable;
 
             // Create an entity with the TransformUsage flags.
-            Entity enemyEntity = GetEntity(transformFlags);
-            
+            Entity enemyEntity = GetEntity(authoring.enemyPrefab, transformFlags);
 
             // If it is a movable enemy, we add a FollowTargetComponent to as behaviour for the entity. 
             if (authoring.isMovableEnemy)
@@ -36,6 +35,7 @@ public class EnemyAuthoring : MonoBehaviour
 
             // Finally, we add a EnemyTag to the entity to easily identify the entity from our systems.
             AddComponent(enemyEntity, new EnemyTag { });
+            AddComponent(enemyEntity, new EntityCustomNameComponent { Name = "Enemy" });
         }
     }
 }
