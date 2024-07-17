@@ -9,21 +9,26 @@ public class ObjectEntitiesReferences : MonoBehaviour
 {
     public static ObjectEntitiesReferences Instance = null;
 
-    /* ENTITY REFERENCES NAMES */
+    /* ----- ENTITY REFERENCES NAMES ----- */
 
     public const string PLAYER_ENTITY_NAME = "PlayerEntity";
+    public const string ENEMY_ENTITY_BASE = "EnemyEntity_Variant_";
 
 
-    /* PROPERTIES */
+    /* ----- PROPERTIES ----- */
 
     public Dictionary<string, Entity> EntityReferences { get; private set; } = new Dictionary<string, Entity>();
 
     [field: SerializeField] public GameObject PlayerGO { get; private set; }
     public Entity PlayerEntity { get; private set; }
 
-    /* FIELDS */
+
+    /* ----- FIELDS ----- */
+
+    [SerializeField] private List<GameObject> enemyPrefabs = new List<GameObject>();
 
     private EntityManager entityManager;
+    private EntityArchetype enemyArchetype;
 
     private void Awake()
     {
@@ -40,10 +45,10 @@ public class ObjectEntitiesReferences : MonoBehaviour
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
     }
-
     private void Start()
     {
         CreatePlayerEntity();
+        CreateEnemyEntities();
     }
 
     /// <summary>
@@ -81,10 +86,35 @@ public class ObjectEntitiesReferences : MonoBehaviour
             Entity playerEntity = entityManager.CreateSingleton<PlayerTag>();
 
             entityManager.AddComponentData(playerEntity, new EntityCustomNameComponent { Name = PLAYER_ENTITY_NAME });
-            entityManager.AddComponentData(playerEntity, new LocalTransform { } );
+            entityManager.AddComponentData(playerEntity, new LocalTransform { });
             entityManager.AddComponentData(playerEntity, new MirrorGameObjectComponent { targetGameObject = PlayerGO });
 
             SetPlayerEntity(playerEntity, true);
         }
+    }
+
+    private void CreateEnemyEntities()
+    {
+        CreateEnemyEntityArchetype();
+
+        for (int i = 0; i < enemyPrefabs.Count; i++)
+        {
+            Entity enemyEntity = entityManager.CreateEntity(enemyArchetype);
+
+            entityManager.SetComponentData(enemyEntity, new FollowTargetComponent { FollowTarget = PlayerEntity, MovementSpeed = 1 });
+            entityManager.SetComponentData(enemyEntity, new EntityCustomNameComponent { Name = ENEMY_ENTITY_BASE + i} );
+
+            EntityReferences.Add(ENEMY_ENTITY_BASE + i, enemyEntity);
+        }
+    }
+
+    private void CreateEnemyEntityArchetype()
+    {
+        enemyArchetype = entityManager.CreateArchetype(
+            typeof(EnemyTag),
+            typeof(LocalTransform),
+            typeof(FollowTargetComponent),
+            typeof(EntityCustomNameComponent)
+            );
     }
 }

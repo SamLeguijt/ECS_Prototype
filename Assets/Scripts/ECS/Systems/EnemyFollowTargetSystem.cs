@@ -4,11 +4,11 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-public partial class EnemyFollowTargetSystem : SystemBase
+public partial class FollowTargetSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        Entities.WithAll<EnemyTag>().ForEach((Entity entity, ref LocalTransform transform, ref FollowTargetComponent followComponent) =>
+        Entities.ForEach((Entity entity, ref LocalTransform transform, ref FollowTargetComponent followComponent) =>
         {
             if (followComponent.FollowTarget == Entity.Null)
                 followComponent.FollowTarget = ObjectEntitiesReferences.Instance.PlayerEntity;
