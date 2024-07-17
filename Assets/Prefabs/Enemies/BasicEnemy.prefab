@@ -175,9 +175,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 986706992190257746}
-  - component: {fileID: 7950259533741120854}
+  - component: {fileID: 6591540935206047481}
   m_Layer: 0
-  m_Name: Enemy_3
+  m_Name: BasicEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,7 +199,7 @@ Transform:
   - {fileID: 788516213759706292}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7950259533741120854
+--- !u!114 &6591540935206047481
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -208,15 +208,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1566600300572820829}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a839f33174572409b0df7d8184add5, type: 3}
+  m_Script: {fileID: 11500000, guid: e99dd32aef6db0640810f1ff58e81303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 1566600300572820829}
-  isMovableEnemy: 1
-  baseMoveSpeed: 3
-  movementThreshold: 20
-  rotateThreshold: 25
-  stoppingDistance: 1
+  Prefab: {fileID: 1566600300572820829}
+  Data: {fileID: 11400000, guid: f63be513998755442870791ff780d4ba, type: 2}
+  meshFilter: {fileID: 8723145074440643551}
+  renderers: {fileID: 2819267795155107973}
 --- !u!1 &1880993062965430983
 GameObject:
   m_ObjectHideFlags: 0

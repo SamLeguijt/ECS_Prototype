@@ -14,8 +14,16 @@ public partial class MirrorGameObjectOrientationSystem : SystemBase
     {
         Entities.WithoutBurst().ForEach((Entity entity, MirrorGameObjectComponent mirrorComponent, ref LocalTransform transform) =>
         {
-            transform.Position = mirrorComponent.targetGameObject.transform.position;   
-            transform.Rotation = mirrorComponent.targetGameObject.transform.rotation;
+            if (!mirrorComponent.objectMirrorsEntity)
+            {
+                transform.Position = mirrorComponent.targetGameObject.transform.position;
+                transform.Rotation = mirrorComponent.targetGameObject.transform.rotation;
+            }
+            else
+            {
+                mirrorComponent.targetGameObject.transform.position = transform.Position;
+                mirrorComponent.targetGameObject.transform.rotation = transform.Rotation;
+            }
 
         }).Run();
     }

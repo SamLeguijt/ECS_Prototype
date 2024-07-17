@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+[RequireMatchingQueriesForUpdate, UpdateInGroup(typeof(SimulationSystemGroup))]
 public partial class FollowTargetSystem : SystemBase
 {
     protected override void OnUpdate()
@@ -42,9 +43,7 @@ public partial class FollowTargetSystem : SystemBase
         {
             float3 forward = math.forward(enemyTransform.Rotation);
 
-            // Add movement
             enemyTransform.Position += forward * followComponent.MovementSpeed * SystemAPI.Time.DeltaTime;
         }
-
     }
 }

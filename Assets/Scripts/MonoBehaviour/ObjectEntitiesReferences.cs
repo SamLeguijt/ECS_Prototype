@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Collections;
 using Unity.Transforms;
+using Unity.Rendering;
+using UnityEngine.EventSystems;
 
 public class ObjectEntitiesReferences : MonoBehaviour
 {
@@ -30,6 +32,7 @@ public class ObjectEntitiesReferences : MonoBehaviour
     private EntityManager entityManager;
     private EntityArchetype enemyArchetype;
 
+    public static Entity enemyContainerEntity;
     private void Awake()
     {
         if (Instance != null)
@@ -95,18 +98,52 @@ public class ObjectEntitiesReferences : MonoBehaviour
 
     private void CreateEnemyEntities()
     {
-        CreateEnemyEntityArchetype();
-
-        for (int i = 0; i < enemyPrefabs.Count; i++)
+        if (enemyContainerEntity != null)
         {
-            Entity enemyEntity = entityManager.CreateEntity(enemyArchetype);
+            CreateEnemyEntityArchetype();
 
-            entityManager.SetComponentData(enemyEntity, new FollowTargetComponent { FollowTarget = PlayerEntity, MovementSpeed = 1 });
-            entityManager.SetComponentData(enemyEntity, new EntityCustomNameComponent { Name = ENEMY_ENTITY_BASE + i} );
+            EnemyPrefabComponent entityPrefabs = entityManager.GetComponentData<EnemyPrefabComponent>(enemyContainerEntity);
 
-            EntityReferences.Add(ENEMY_ENTITY_BASE + i, enemyEntity);
+            Entity basicEnemyPrefab = entityManager.Instantiate(entityPrefabs.basicEnemy);
+            entityManager.SetArchetype(basicEnemyPrefab, enemyArchetype);
+
+            entityManager.SetComponentData(basicEnemyPrefab, new EntityCustomNameComponent { Name = "BasicEnemyEntity" });
+            entityManager.SetComponentData(basicEnemyPrefab, new FollowTargetComponent
+            {
+                FollowTarget = PlayerEntity,
+            });
+
+                EntityReferences.Add("BasicEnemyEntity", basicEnemyPrefab);
+            /*
+                    for (int i = 0; i < enemyPrefabs.Count; i++)
+                    {
+                        enemyPrefabs[i].TryGetComponent(out EnemyPrefab enemy);
+
+                        if (enemy != null)
+                        {
+
+
+
+                            Entity enemyEntity = entityManager.CreateEntity(enemyArchetype);
+
+                            entityManager.SetComponentData(enemyEntity, new EntityCustomNameComponent { Name = enemy.Prefab.name });
+                            entityManager.SetComponentData(enemyEntity, new FollowTargetComponent
+                            {
+                                FollowTarget = PlayerEntity,
+                                MovementSpeed = enemy.Data.MovementSpeed,
+                                MoveDistanceThreshold = enemy.Data.PlayerInRangeMoveThreshold,
+                                RotateDistanceThreshold = enemy.Data.PlayerInRangeRotationThreshold,
+                                StoppingDistance = enemy.Data.StoppingDistance,
+                            });
+                            entityManager.SetComponentData(enemyEntity, new LocalTransform { Scale = 1 });
+                            Mesh Mesh = enemy.meshFilter.sharedMesh;
+                            Material mat = enemy.renderers.sharedMaterial;
+
+                            entityManager.SetSharedComponentManaged(enemyEntity, new RenderMesh { mesh = Mesh, material = mat });
+            */
         }
     }
+    
 
     private void CreateEnemyEntityArchetype()
     {
@@ -114,7 +151,8 @@ public class ObjectEntitiesReferences : MonoBehaviour
             typeof(EnemyTag),
             typeof(LocalTransform),
             typeof(FollowTargetComponent),
-            typeof(EntityCustomNameComponent)
+            typeof(EntityCustomNameComponent),
+            typeof(RenderMesh)
             );
     }
 }

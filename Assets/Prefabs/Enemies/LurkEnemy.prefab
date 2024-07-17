@@ -376,9 +376,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 526618089375297996}
-  - component: {fileID: 5090698580728172958}
+  - component: {fileID: 4850511567982167283}
   m_Layer: 0
-  m_Name: Enemy_2
+  m_Name: LurkEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -400,7 +400,7 @@ Transform:
   - {fileID: 865626993847475349}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5090698580728172958
+--- !u!114 &4850511567982167283
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -409,12 +409,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7877852273239586841}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a839f33174572409b0df7d8184add5, type: 3}
+  m_Script: {fileID: 11500000, guid: e99dd32aef6db0640810f1ff58e81303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 7877852273239586841}
-  isMovableEnemy: 1
-  baseMoveSpeed: 3
-  movementThreshold: 20
-  rotateThreshold: 25
-  stoppingDistance: 1
+  Prefab: {fileID: 7877852273239586841}
+  Data: {fileID: 11400000, guid: 9189c8e7350fd4045a808b499ab42c9c, type: 2}
+  meshFilter: {fileID: 3092845892481891427}
+  renderers: {fileID: 6345040157387637045}

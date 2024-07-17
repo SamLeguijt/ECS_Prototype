@@ -8,4 +8,5 @@ using Unity.Entities;
 public class MirrorGameObjectComponent : IComponentData
 {
     public GameObject targetGameObject;
+    public bool objectMirrorsEntity;
 }
