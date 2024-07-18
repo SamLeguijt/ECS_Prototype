@@ -14,7 +14,7 @@ public class EnemyPrefabAuthoring : MonoBehaviour
     {
         public override void Bake(EnemyPrefabAuthoring authoring)
         {
-            Entity entity = GetEntity(authoring, TransformUsageFlags.None);
+            Entity entity = GetEntity(TransformUsageFlags.None);
             EnemyPrefabComponent component = new EnemyPrefabComponent
             {
                 basicEnemy = GetEntity(authoring.basicEnemyPrefab, TransformUsageFlags.Dynamic),
@@ -22,9 +22,8 @@ public class EnemyPrefabAuthoring : MonoBehaviour
                 lurkingEnemy = GetEntity(authoring.lurkingEnemyPrefab, TransformUsageFlags.Dynamic)
             };
 
+            AddComponent(entity, new EntityCustomNameComponent { Name = "ContainerEntity"});
             AddComponent(entity, component);
-            
-            ObjectEntitiesReferences.enemyContainerEntity = entity;
         }
     }
 }

@@ -30,9 +30,13 @@ public class ObjectEntitiesReferences : MonoBehaviour
     [SerializeField] private List<GameObject> enemyPrefabs = new List<GameObject>();
 
     private EntityManager entityManager;
-    private EntityArchetype enemyArchetype;
-
+    public EntityArchetype enemyArchetype;
     public static Entity enemyContainerEntity;
+
+    public Entity basicEnemy;
+    public Entity agroEnemy;
+    public Entity lurkEnemy;
+
     private void Awake()
     {
         if (Instance != null)
@@ -98,61 +102,6 @@ public class ObjectEntitiesReferences : MonoBehaviour
 
     private void CreateEnemyEntities()
     {
-        if (enemyContainerEntity != null)
-        {
-            CreateEnemyEntityArchetype();
 
-            EnemyPrefabComponent entityPrefabs = entityManager.GetComponentData<EnemyPrefabComponent>(enemyContainerEntity);
-
-            Entity basicEnemyPrefab = entityManager.Instantiate(entityPrefabs.basicEnemy);
-            entityManager.SetArchetype(basicEnemyPrefab, enemyArchetype);
-
-            entityManager.SetComponentData(basicEnemyPrefab, new EntityCustomNameComponent { Name = "BasicEnemyEntity" });
-            entityManager.SetComponentData(basicEnemyPrefab, new FollowTargetComponent
-            {
-                FollowTarget = PlayerEntity,
-            });
-
-                EntityReferences.Add("BasicEnemyEntity", basicEnemyPrefab);
-            /*
-                    for (int i = 0; i < enemyPrefabs.Count; i++)
-                    {
-                        enemyPrefabs[i].TryGetComponent(out EnemyPrefab enemy);
-
-                        if (enemy != null)
-                        {
-
-
-
-                            Entity enemyEntity = entityManager.CreateEntity(enemyArchetype);
-
-                            entityManager.SetComponentData(enemyEntity, new EntityCustomNameComponent { Name = enemy.Prefab.name });
-                            entityManager.SetComponentData(enemyEntity, new FollowTargetComponent
-                            {
-                                FollowTarget = PlayerEntity,
-                                MovementSpeed = enemy.Data.MovementSpeed,
-                                MoveDistanceThreshold = enemy.Data.PlayerInRangeMoveThreshold,
-                                RotateDistanceThreshold = enemy.Data.PlayerInRangeRotationThreshold,
-                                StoppingDistance = enemy.Data.StoppingDistance,
-                            });
-                            entityManager.SetComponentData(enemyEntity, new LocalTransform { Scale = 1 });
-                            Mesh Mesh = enemy.meshFilter.sharedMesh;
-                            Material mat = enemy.renderers.sharedMaterial;
-
-                            entityManager.SetSharedComponentManaged(enemyEntity, new RenderMesh { mesh = Mesh, material = mat });
-            */
-        }
-    }
-    
-
-    private void CreateEnemyEntityArchetype()
-    {
-        enemyArchetype = entityManager.CreateArchetype(
-            typeof(EnemyTag),
-            typeof(LocalTransform),
-            typeof(FollowTargetComponent),
-            typeof(EntityCustomNameComponent),
-            typeof(RenderMesh)
-            );
     }
 }
