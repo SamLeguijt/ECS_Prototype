@@ -52,36 +52,29 @@ public partial class EnemyPrefabSystem : SystemBase
             NativeList<Entity> enemyEntites = new NativeList<Entity>(Allocator.Temp)
             {
                 // Assign the fields and add to the list simultaneously.
-               (basicEnemy = ecb.Instantiate(prefabContainer.basicEnemy)),
-                (aggressiveEnemy = ecb.Instantiate(prefabContainer.aggresiveEnemy)),
-                (lurkingEnemy = ecb.Instantiate(prefabContainer.lurkingEnemy)),
+               (basicEnemy = EntityManager.Instantiate(prefabContainer.basicEnemy)),
+                (aggressiveEnemy = EntityManager.Instantiate(prefabContainer.aggresiveEnemy)),
+                (lurkingEnemy = EntityManager.Instantiate(prefabContainer.lurkingEnemy)),
             };
 
             for (int i = 0; i < enemyEntites.Length; i++)
             {
                 // Note: Can't set an archetype to the entities because that would remove components that were added during the baking process.
-                ecb.SetName(enemyEntites[i], "Enemy_" + i);
+                EntityManager.SetName(enemyEntites[i], "Enemy_" + i);
 
-                ecb.AddComponent(enemyEntites[i], typeof(EnemyTag));
-                ecb.AddComponent(enemyEntites[i], typeof(FollowTargetComponent));
-                ecb.AddComponent(enemyEntites[i], typeof(EntityCustomNameComponent));
-
-                ecb.SetEnabled(enemyEntites[i], false);
+                EntityManager.AddComponent(enemyEntites[i], typeof(EnemyTag));
+                EntityManager.AddComponent(enemyEntites[i], typeof(FollowTargetComponent));
+                EntityManager.AddComponent(enemyEntites[i], typeof(EntityCustomNameComponent));
             }
 
             if (ObjectEntitiesReferences.Instance != null)
             {
-                Debug.Log("Assign");
-                ObjectEntitiesReferences.Instance.basicEnemy = basicEnemy;
+/*                ObjectEntitiesReferences.Instance.basicEnemy = basicEnemy;
                 ObjectEntitiesReferences.Instance.agroEnemy = aggressiveEnemy;
                 ObjectEntitiesReferences.Instance.lurkEnemy = lurkingEnemy;
+*/
+                ObjectEntitiesReferences.Instance.CreateFunctionalEnemyEntityPrefabs(basicEnemy, aggressiveEnemy, lurkingEnemy);
             }
-            else
-            {
-                Debug.Log("null sdasa");
-
-            }
-
 
             ecb.Playback(EntityManager);
             ecb.Dispose();
