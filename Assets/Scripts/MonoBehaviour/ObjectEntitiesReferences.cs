@@ -6,6 +6,7 @@ using Unity.Collections;
 using Unity.Transforms;
 using Unity.Rendering;
 using UnityEngine.EventSystems;
+using UnityEditor.PackageManager;
 
 public class ObjectEntitiesReferences : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class ObjectEntitiesReferences : MonoBehaviour
     public const string BASIC_ENEMY_KEY = "BasicEnemy";
     public const string AGRO_ENEMY_KEY = "AgroEnemy";
     public const string LURK_ENEMY_KEY = "LurkEnemy";
+
+    static Dictionary<Entity, Test> t = new Dictionary<Entity, Test>();
 
 
     /* ----- PROPERTIES ----- */
@@ -59,16 +62,22 @@ public class ObjectEntitiesReferences : MonoBehaviour
     private void Start()
     {
         CreatePlayerEntity();
-    
-        StartCoroutine(SpawnWaves(10));
+
+        //StartCoroutine(SpawnWaves(100));
+        Debug.Log("get 1 ");
+
+        foreach (Entity entity in t.Keys)
+        {
+            Debug.Log("get ");
+            entityManager.AddComponentData(entity, t[entity].customNameComponent);
+        }
     }
 
     private IEnumerator SpawnWaves(int amount)
     {
         for (int i = 0; i < amount; i++)
         {
-            yield return new WaitForSeconds(3);
-            Debug.Log("Spawning wave");
+            yield return new WaitForSeconds(5);
 
             Entity basic = entityManager.Instantiate(EntityReferences[BASIC_ENEMY_KEY]);
             Entity agro = entityManager.Instantiate(EntityReferences[AGRO_ENEMY_KEY]);
@@ -180,5 +189,67 @@ public class ObjectEntitiesReferences : MonoBehaviour
 
             AddToDictionary(LURK_ENEMY_KEY, lurkingEnemy);
         }
+    }
+
+    public static void CreateBullets(BulletPrefabsComponent container, List<BulletData> bulletData)
+    {
+        Debug.Log(container);
+        Debug.Log(container.smallBullet);
+        Debug.Log(container.largeBullet);
+        EntityManager entityManager = new EntityManager();
+
+        List<Entity> bulletEntities = new List<Entity> { container.smallBullet, container.largeBullet};
+
+        for (int i = 0; i < bulletData.Count; i++)
+        {
+            BulletComponent bulletComponent = new BulletComponent
+            {
+                Damage = bulletData[i].Damage,
+                layerMask = bulletData[i].CollisionLayers
+            };
+
+            LifetimeComponent lifetimeComponent = new LifetimeComponent()
+            {
+                CurrentLifeTime = 0,
+                MaxLifeTime = bulletData[i].Lifetime
+            };
+
+            MoveForwardComponent moveForwardComponent = new MoveForwardComponent()
+            {
+                Speed = bulletData[i].Speed
+            };
+
+            EntityCustomNameComponent customNameComponent = new EntityCustomNameComponent()
+            {
+                Name = bulletData[i].name
+            };
+
+            Test smallBulletTest = new Test()
+            {
+                entity = bulletEntities[i],
+            };
+
+
+            t.Add(bulletEntities[i] ,smallBulletTest);
+
+            Debug.Log("Now add");
+/*            entityManager.AddComponentData(bulletEntities[i], bulletComponent);
+            entityManager.AddComponentData(bulletEntities[i], lifetimeComponent);
+            entityManager.AddComponentData(bulletEntities[i], moveForwardComponent);
+            entityManager.AddComponentData(bulletEntities[i], customNameComponent);*/
+            Debug.Log("Done");
+
+        }
+
+
+    }
+
+    private struct Test
+    {
+        public Entity entity;
+        public BulletComponent bullet;
+        public EntityCustomNameComponent customNameComponent;
+        public LifetimeComponent LifetimeComponent;
+        public MoveForwardComponent MoveForwardComponent;
     }
 }

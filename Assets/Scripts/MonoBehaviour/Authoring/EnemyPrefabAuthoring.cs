@@ -22,7 +22,7 @@ public class EnemyPrefabAuthoring : MonoBehaviour
                 lurkingEnemy = GetEntity(authoring.lurkingEnemyPrefab, TransformUsageFlags.Dynamic)
             };
 
-            AddComponent(entity, new EntityCustomNameComponent { Name = "ContainerEntity"});
+            AddComponent(entity, new EntityCustomNameComponent { Name = "EnemyContainer"});
             AddComponent(entity, component);
         }
     }

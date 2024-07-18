@@ -7,12 +7,6 @@ public partial class EnemyPrefabSystem : SystemBase
 {
     private bool prefabsAreCreated = false;
 
-    private NativeList<Entity> enemyEntities;
-
-    private Entity basicEnemy;
-    private Entity aggressiveEnemy;
-    private Entity lurkingEnemy;
-
     private EnemyPrefabComponent prefabContainer;
     private bool containerIsFound = false;
 
@@ -20,7 +14,6 @@ public partial class EnemyPrefabSystem : SystemBase
     {
         prefabsAreCreated = false;
 
-        enemyEntities = new NativeList<Entity>();
 
         if (SystemAPI.TryGetSingleton(out EnemyPrefabComponent container))
         {
@@ -48,13 +41,17 @@ public partial class EnemyPrefabSystem : SystemBase
         {
             EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
+            Entity basicEnemy;
+            Entity aggesiveEnemy;
+            Entity lurkingEnemy;
+
             // Create a list so we can iterate over the enemies and add the same components
             NativeList<Entity> enemyEntites = new NativeList<Entity>(Allocator.Temp)
             {
                 // Assign the fields and add to the list simultaneously.
-               (basicEnemy = EntityManager.Instantiate(prefabContainer.basicEnemy)),
-                (aggressiveEnemy = EntityManager.Instantiate(prefabContainer.aggresiveEnemy)),
-                (lurkingEnemy = EntityManager.Instantiate(prefabContainer.lurkingEnemy)),
+               ( basicEnemy = EntityManager.Instantiate(prefabContainer.basicEnemy)),
+                ( aggesiveEnemy = EntityManager.Instantiate(prefabContainer.aggresiveEnemy)),
+                ( lurkingEnemy = EntityManager.Instantiate(prefabContainer.lurkingEnemy)),
             };
 
             for (int i = 0; i < enemyEntites.Length; i++)
@@ -69,11 +66,7 @@ public partial class EnemyPrefabSystem : SystemBase
 
             if (ObjectEntitiesReferences.Instance != null)
             {
-/*                ObjectEntitiesReferences.Instance.basicEnemy = basicEnemy;
-                ObjectEntitiesReferences.Instance.agroEnemy = aggressiveEnemy;
-                ObjectEntitiesReferences.Instance.lurkEnemy = lurkingEnemy;
-*/
-                ObjectEntitiesReferences.Instance.CreateFunctionalEnemyEntityPrefabs(basicEnemy, aggressiveEnemy, lurkingEnemy);
+                ObjectEntitiesReferences.Instance.CreateFunctionalEnemyEntityPrefabs(basicEnemy, aggesiveEnemy, lurkingEnemy);
             }
 
             ecb.Playback(EntityManager);
