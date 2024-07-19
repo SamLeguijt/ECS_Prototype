@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         firepointEntity = entityManager.CreateEntity(typeof(LocalTransform), typeof(MirrorGameObjectComponent), typeof(EntityCustomNameComponent));
-        entityManager.SetComponentData(firepointEntity, new MirrorGameObjectComponent { targetGameObject = firePoint.gameObject, objectMirrorsEntity = false });
+        entityManager.SetComponentData(firepointEntity, new MirrorGameObjectComponent { TargetGameObject = firePoint.gameObject, ObjectMirrorsEntity = false });
         entityManager.SetComponentData(firepointEntity, new EntityCustomNameComponent { Name = "FirepointEntity" });
     }
     private void Update()

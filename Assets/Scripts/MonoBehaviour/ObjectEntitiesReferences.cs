@@ -2,11 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
-using Unity.Collections;
 using Unity.Transforms;
-using Unity.Rendering;
-using UnityEngine.EventSystems;
-using UnityEditor.PackageManager;
 
 public class ObjectEntitiesReferences : MonoBehaviour
 {
@@ -124,7 +120,7 @@ public class ObjectEntitiesReferences : MonoBehaviour
 
             entityManager.AddComponentData(playerEntity, new EntityCustomNameComponent { Name = PLAYER_ENTITY_KEY });
             entityManager.AddComponentData(playerEntity, new LocalTransform { });
-            entityManager.AddComponentData(playerEntity, new MirrorGameObjectComponent { targetGameObject = PlayerGO });
+            entityManager.AddComponentData(playerEntity, new MirrorGameObjectComponent { TargetGameObject = PlayerGO });
 
             SetPlayerEntity(playerEntity);
         }
@@ -190,6 +186,9 @@ public class ObjectEntitiesReferences : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Unused as of now.
+    /// </summary>
     public void CreateBullets()
     {
         Debug.Log(bulletContainerEntity);
@@ -202,7 +201,7 @@ public class ObjectEntitiesReferences : MonoBehaviour
             BulletComponent bulletComponent = new BulletComponent
             {
                 Damage = bulletData[i].Damage,
-                layerMask = bulletData[i].CollisionLayers
+                HittableLayers = bulletData[i].CollisionLayers
             };
 
             LifetimeComponent lifetimeComponent = new LifetimeComponent()

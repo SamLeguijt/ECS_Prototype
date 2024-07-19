@@ -7,6 +7,15 @@ using Unity.Collections;
 using Unity.Transforms;
 using RaycastHit = Unity.Physics.RaycastHit;
 
+/// <summary>
+/// System that handles collision between Bullet entities and other Entities. 
+/// <br/> <br/> Relevant classes/structs: 
+/// <br/> <see cref="BulletComponent"/> -> Updates on every Entity with this component, as long at it also has a <see cref="LocalTransform"/> component
+/// <br/> <see cref="CollisionLayersEnum"/> -> Predefined enum of layers to detect collisions with, unless layers specified in <see cref="BulletComponent.HittableLayers"/> is used instead.
+/// <br/> <see cref="CollisionResult"/> -> Defines collision components that can be used outside of this ECS system using the static event <seealso cref="OnECSBulletCollisionEvent"/>
+/// </summary>
+
+
 [BurstCompile, RequireMatchingQueriesForUpdate]
 public partial class BulletCollisionSystem : SystemBase
 {
@@ -42,7 +51,7 @@ public partial class BulletCollisionSystem : SystemBase
                 uint collidableLayersManual = (uint)CollisionLayersEnum.Environment | (uint)CollisionLayersEnum.Enemy | (uint)CollisionLayersEnum.Default;
 
                 /* B */
-                int layers = (int)bullet.layerMask;
+                int layers = (int)bullet.HittableLayers;
                 uint collidableLayersComponent = (uint)layers; // Cant convert LayerMask type to uint type directly.
 
                 // Note:
@@ -50,7 +59,6 @@ public partial class BulletCollisionSystem : SystemBase
                 // This seems to be the 'industry standard' as far as I could find online, and makes the most sense because: 
                 // We want to know if a collision has occured during the frame, not if it will happen. 
                 float3 rayDirection = -math.forward(transform.Rotation);
-
 
                 // Create a rayInput struct to store some info for our raycasts.
                 RaycastInput rayInput = new RaycastInput
@@ -156,7 +164,8 @@ public partial class BulletCollisionSystem : SystemBase
         // Check if the Entity is an enemy by finding the EnemyTag component on the entity. 
         if (EntityManager.HasComponent<EnemyTag>(entityCollided))
         {
-            RemoveBulletOnCollision(entityCollided);
+            // Destroys the Enemy entity (temp).
+            EntityManager.DestroyEntity(entityCollided);
         }
     }
 

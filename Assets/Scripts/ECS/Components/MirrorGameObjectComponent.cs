@@ -7,6 +7,6 @@ using Unity.Entities;
 /// </summary>
 public class MirrorGameObjectComponent : IComponentData
 {
-    public GameObject targetGameObject;
-    public bool objectMirrorsEntity;
+    public GameObject TargetGameObject;
+    public bool ObjectMirrorsEntity;
 }
