@@ -24,14 +24,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int amount = 1;
     [SerializeField] private bool spawnWave = false;
 
-    [Header("Bullet Settings")]
-    [SerializeField] private int perFireAmount = 1;
-
     Coroutine continuousWaves = null;
     Coroutine singleWave = null;
+    Coroutine firingRoutine = null;
+
     EntityManager entityManager;
 
-    private bool isMouseDown; 
+    private bool isMouseDown;
+
+
 
     private void Start()
     {
@@ -52,6 +53,9 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            if (firingRoutine != null)
+                firingRoutine = null;
+
             isMouseDown = false;
         }
 
@@ -80,11 +84,14 @@ public class GameManager : MonoBehaviour
     {
         if (fireSingleShot)
         {
-            playerController.Fire();
+            playerController.Fire(bulletsPerShot);
         }
         else
         {
-
+            if (firingRoutine == null)
+            {
+                firingRoutine = StartCoroutine(FireBulletsRoutine());
+            }
         }
     }
 
@@ -92,9 +99,9 @@ public class GameManager : MonoBehaviour
     {
         WaitForSeconds delay = new WaitForSeconds(delayBetweenShots);
 
-        while (isMouseDown) 
+        while (isMouseDown)
         {
-            playerController.Fire();
+            playerController.Fire(bulletsPerShot);
 
             yield return delay;
         }
@@ -121,7 +128,7 @@ public class GameManager : MonoBehaviour
             Entity agro = entityManager.Instantiate(ObjectEntitiesReferences.Instance.EntityReferences[ObjectEntitiesReferences.AGRO_ENEMY_KEY]);
             Entity lurk = entityManager.Instantiate(ObjectEntitiesReferences.Instance.EntityReferences[ObjectEntitiesReferences.LURK_ENEMY_KEY]);
 
-            entityManager.SetComponentData(basic, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position , Scale = 1});
+            entityManager.SetComponentData(basic, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position, Scale = 1 });
             entityManager.SetComponentData(agro, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position, Scale = 1 });
             entityManager.SetComponentData(lurk, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position, Scale = 1 });
 
@@ -149,8 +156,8 @@ public class GameManager : MonoBehaviour
                 Entity lurk = entityManager.Instantiate(ObjectEntitiesReferences.Instance.EntityReferences[ObjectEntitiesReferences.LURK_ENEMY_KEY]);
 
                 entityManager.SetComponentData(basic, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position, Scale = 1 });
-                entityManager.SetComponentData(agro, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position , Scale = 1 });
-                entityManager.SetComponentData(lurk, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position , Scale = 1 });
+                entityManager.SetComponentData(agro, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position, Scale = 1 });
+                entityManager.SetComponentData(lurk, new LocalTransform { Position = enemySpawnPoints[GetRandomSpawnPointIndex()].position, Scale = 1 });
 
                 entityManager.SetEnabled(basic, true);
                 entityManager.SetEnabled(agro, true);

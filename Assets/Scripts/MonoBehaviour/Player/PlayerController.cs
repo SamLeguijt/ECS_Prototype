@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform firePoint = null;
+    [SerializeField] private List<Transform> firepoints;
 
     [Header("Bullet references")]
     [SerializeField] private GameObject smallBulletPrefab = null;
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour
         entityManager.SetComponentData(firepointEntity, new EntityCustomNameComponent { Name = "FirepointEntity" });
     }
 
-    public void Fire()
+    public void Fire(int bulletAmount)
     {
         // Make sure references are assigned (Cant be done in start, then returns null).
         if (smallBulletEntityPrefab == Entity.Null)
@@ -48,11 +49,18 @@ public class PlayerController : MonoBehaviour
         if (largeBulletEntityPrefab == Entity.Null)
             largeBulletEntityPrefab = BulletPrefabSystem.GetLargeBulletPrefab();
 
-        FireBullet();
+        for (int i = 0; i < bulletAmount; i++)
+        {
+            if (i >= firepoints.Count)
+                break;
+
+            FireBullet(i);
+        }
     }
 
-    private void FireBullet()
-    { 
+    private void FireBullet(int firepointIndex)
+    {
+        Debug.Log("Bullet");
         if (useECSBullet)
         {
             float maxBulletLifetime = 0;
@@ -75,8 +83,8 @@ public class PlayerController : MonoBehaviour
             LocalTransform firepointTransform = entityManager.GetComponentData<LocalTransform>(firepointEntity);
 
             entityManager.SetComponentData(bullet, new MoveForwardComponent { Speed = smallBulletData.Speed });
-            entityManager.SetComponentData(bullet, new LocalTransform { Position = firepointTransform.Position, Rotation = firepointTransform.Rotation, Scale = 1 }); ;
-            entityManager.SetComponentData(bullet, new LifetimeComponent { CurrentLifeTime = 0, MaxLifeTime = maxBulletLifetime } ); ;
+            entityManager.SetComponentData(bullet, new LocalTransform { Position = firepoints[firepointIndex].position, Rotation = firepointTransform.Rotation, Scale = 1 }); ;
+            entityManager.SetComponentData(bullet, new LifetimeComponent { CurrentLifeTime = 0, MaxLifeTime = maxBulletLifetime }); ;
 
             entityManager.SetEnabled(bullet, true);
         }
