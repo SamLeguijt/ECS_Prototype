@@ -377,7 +377,8 @@ GameObject:
   m_Component:
   - component: {fileID: 526618089375297996}
   - component: {fileID: 4850511567982167283}
-  m_Layer: 0
+  - component: {fileID: 301667005203682329}
+  m_Layer: 8
   m_Name: LurkEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,3 +417,26 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: 9189c8e7350fd4045a808b499ab42c9c, type: 2}
   meshFilter: {fileID: 3092845892481891427}
   renderers: {fileID: 6345040157387637045}
+--- !u!136 &301667005203682329
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7877852273239586841}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.0720992
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.00000834465, z: 0}

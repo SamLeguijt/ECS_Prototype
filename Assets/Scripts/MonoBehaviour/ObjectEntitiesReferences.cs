@@ -62,7 +62,7 @@ public class ObjectEntitiesReferences : MonoBehaviour
     {
         CreatePlayerEntity();
 
-        //StartCoroutine(SpawnWaves(100));
+        StartCoroutine(SpawnWaves(100));
 
         //CreateBullets();
     }
@@ -152,7 +152,7 @@ public class ObjectEntitiesReferences : MonoBehaviour
             // So instead, we disable the entity. (Also, Assigning a field reference to the prefab and then destroying the prefab is also not allowed).
             entityManager.SetEnabled(basicEnemy, false);
 
-            AddToDictionary(BASIC_ENEMY_KEY, this.basicEnemy);
+            AddToDictionary(BASIC_ENEMY_KEY, basicEnemy);
         }
 
         // Set data for the agro enemy.

@@ -342,7 +342,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8387169430058834420}
   - component: {fileID: 2955824507013857342}
-  m_Layer: 0
+  - component: {fileID: 795593219422246356}
+  m_Layer: 8
   m_Name: AggresiveEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,6 +382,29 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: d2c7cd84fad16d84aaf5c019575372dc, type: 2}
   meshFilter: {fileID: 4081261486441630807}
   renderers: {fileID: 4221694396752588793}
+--- !u!136 &795593219422246356
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5210706799237880616}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.0720992
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.00000834465, z: 0}
 --- !u!1 &8419047860439983133
 GameObject:
   m_ObjectHideFlags: 0
