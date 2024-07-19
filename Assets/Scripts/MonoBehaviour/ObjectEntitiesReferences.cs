@@ -19,9 +19,6 @@ public class ObjectEntitiesReferences : MonoBehaviour
     public const string AGRO_ENEMY_KEY = "AgroEnemy";
     public const string LURK_ENEMY_KEY = "LurkEnemy";
 
-    static Dictionary<Entity, Test> t = new Dictionary<Entity, Test>();
-
-
     /* ----- PROPERTIES ----- */
 
     public Dictionary<string, Entity> EntityReferences { get; private set; } = new Dictionary<string, Entity>();
@@ -36,9 +33,11 @@ public class ObjectEntitiesReferences : MonoBehaviour
     [SerializeField] private BaseEnemyData aggresiveEnemyData = null;
     [SerializeField] private BaseEnemyData lurkingEnemyData = null;
 
+    [SerializeField] private List<BulletData> bulletData = null;
+
     private EntityManager entityManager;
     public EntityArchetype enemyArchetype;
-    public static Entity enemyContainerEntity;
+    public static Entity bulletContainerEntity;
 
     public Entity basicEnemy;
     public Entity agroEnemy;
@@ -63,14 +62,9 @@ public class ObjectEntitiesReferences : MonoBehaviour
     {
         CreatePlayerEntity();
 
-        //StartCoroutine(SpawnWaves(100));
-        Debug.Log("get 1 ");
+        StartCoroutine(SpawnWaves(100));
 
-        foreach (Entity entity in t.Keys)
-        {
-            Debug.Log("get ");
-            entityManager.AddComponentData(entity, t[entity].customNameComponent);
-        }
+        //CreateBullets();
     }
 
     private IEnumerator SpawnWaves(int amount)
@@ -109,7 +103,7 @@ public class ObjectEntitiesReferences : MonoBehaviour
 
         EntityReferences.Add(enityNameKey, relatedEntityValue);
     }
-    
+
     /// <summary>
     /// Assigns <paramref name="playerEntity"/> to be the primary PlayerEntity to reference in other components and systems. 
     /// </summary>
@@ -136,12 +130,13 @@ public class ObjectEntitiesReferences : MonoBehaviour
         }
     }
 
-    public void CreateFunctionalEnemyEntityPrefabs(Entity basicEnemy, Entity agroEnemy, Entity lurkingEnemy)
+    public void SetEnemyPrefabValues(Entity basicEnemy, Entity agroEnemy, Entity lurkingEnemy)
     {
         // Note: 
         // Example of setting the data of each enemy entity to their respective SO data. 
         // When actually implementing a similar concept, should be made with enum of enemytype and list/dict or something similar instead of having to set values values per enemy as seen below. 
 
+        // Set data for the basic enemy.
         if (basicEnemy != Entity.Null)
         {
             entityManager.SetComponentData(basicEnemy, new FollowTargetComponent
@@ -152,11 +147,15 @@ public class ObjectEntitiesReferences : MonoBehaviour
                 StoppingDistance = basicEnemyData.StoppingDistance
             });
             entityManager.SetComponentData(basicEnemy, new EntityCustomNameComponent { Name = BASIC_ENEMY_KEY });
+            
+            // Note: We are not allowed to destroy the entity prefab because we wont be able to instantiate copies of it later.
+            // So instead, we disable the entity. (Also, Assigning a field reference to the prefab and then destroying the prefab is also not allowed).
             entityManager.SetEnabled(basicEnemy, false);
 
-            AddToDictionary(BASIC_ENEMY_KEY, basicEnemy);
+            AddToDictionary(BASIC_ENEMY_KEY, this.basicEnemy);
         }
 
+        // Set data for the agro enemy.
         if (agroEnemy != Entity.Null)
         {
             entityManager.SetComponentData(agroEnemy, new FollowTargetComponent
@@ -171,9 +170,9 @@ public class ObjectEntitiesReferences : MonoBehaviour
             entityManager.SetEnabled(agroEnemy, false);
 
             AddToDictionary(AGRO_ENEMY_KEY, agroEnemy);
-
         }
 
+        // Set data for the lurk enemy.
         if (lurkingEnemy != Entity.Null)
         {
             entityManager.SetComponentData(lurkingEnemy, new FollowTargetComponent
@@ -191,14 +190,12 @@ public class ObjectEntitiesReferences : MonoBehaviour
         }
     }
 
-    public static void CreateBullets(BulletPrefabsComponent container, List<BulletData> bulletData)
+    public void CreateBullets()
     {
-        Debug.Log(container);
-        Debug.Log(container.smallBullet);
-        Debug.Log(container.largeBullet);
-        EntityManager entityManager = new EntityManager();
+        Debug.Log(bulletContainerEntity);
+        BulletPrefabsComponent bulletEntityContainer = entityManager.GetComponentData<BulletPrefabsComponent>(bulletContainerEntity);
 
-        List<Entity> bulletEntities = new List<Entity> { container.smallBullet, container.largeBullet};
+        List<Entity> bulletEntities = new List<Entity> { bulletEntityContainer.smallBullet, bulletEntityContainer.largeBullet };
 
         for (int i = 0; i < bulletData.Count; i++)
         {
@@ -224,32 +221,13 @@ public class ObjectEntitiesReferences : MonoBehaviour
                 Name = bulletData[i].name
             };
 
-            Test smallBulletTest = new Test()
+            if (bulletEntities[i] != Entity.Null)
             {
-                entity = bulletEntities[i],
-            };
-
-
-            t.Add(bulletEntities[i] ,smallBulletTest);
-
-            Debug.Log("Now add");
-/*            entityManager.AddComponentData(bulletEntities[i], bulletComponent);
-            entityManager.AddComponentData(bulletEntities[i], lifetimeComponent);
-            entityManager.AddComponentData(bulletEntities[i], moveForwardComponent);
-            entityManager.AddComponentData(bulletEntities[i], customNameComponent);*/
-            Debug.Log("Done");
-
+                entityManager.AddComponentData(bulletEntities[i], bulletComponent);
+                entityManager.AddComponentData(bulletEntities[i], lifetimeComponent);
+                entityManager.AddComponentData(bulletEntities[i], moveForwardComponent);
+                entityManager.AddComponentData(bulletEntities[i], customNameComponent);
+            }
         }
-
-
-    }
-
-    private struct Test
-    {
-        public Entity entity;
-        public BulletComponent bullet;
-        public EntityCustomNameComponent customNameComponent;
-        public LifetimeComponent LifetimeComponent;
-        public MoveForwardComponent MoveForwardComponent;
     }
 }
