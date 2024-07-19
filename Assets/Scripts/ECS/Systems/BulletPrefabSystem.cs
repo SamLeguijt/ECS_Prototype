@@ -76,6 +76,9 @@ public partial class BulletPrefabSystem : SystemBase
             bulletEntities.Clear();
             bulletEntities.Dispose();
 
+            smallBulletPrefab = prefabContainer.smallBullet;
+            largeBulletPrefab = prefabContainer.largeBullet;
+
             prefabsAreCreated = true;
         }
     }

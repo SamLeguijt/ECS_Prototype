@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 153c96c1300b2844b99061b2cba7c5d6, type: 3}
   m_Name: SmallBullet
   m_EditorClassIdentifier: 
-  <Speed>k__BackingField: 30
+  <Speed>k__BackingField: 5
   <Damage>k__BackingField: 5
   <Lifetime>k__BackingField: 10
   <CollisionLayers>k__BackingField:

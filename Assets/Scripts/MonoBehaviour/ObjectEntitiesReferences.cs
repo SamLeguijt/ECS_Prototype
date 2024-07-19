@@ -62,7 +62,7 @@ public class ObjectEntitiesReferences : MonoBehaviour
     {
         CreatePlayerEntity();
 
-        StartCoroutine(SpawnWaves(100));
+        //StartCoroutine(SpawnWaves(100));
 
         //CreateBullets();
     }
