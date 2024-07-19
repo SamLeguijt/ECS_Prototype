@@ -38,23 +38,21 @@ public class PlayerController : MonoBehaviour
         entityManager.SetComponentData(firepointEntity, new MirrorGameObjectComponent { TargetGameObject = firePoint.gameObject, ObjectMirrorsEntity = false });
         entityManager.SetComponentData(firepointEntity, new EntityCustomNameComponent { Name = "FirepointEntity" });
     }
-    private void Update()
+
+    public void Fire()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            FireBullet();
-        }
+        // Make sure references are assigned (Cant be done in start, then returns null).
+        if (smallBulletEntityPrefab == Entity.Null)
+            smallBulletEntityPrefab = BulletPrefabSystem.GetSmallBulletPrefab();
+
+        if (largeBulletEntityPrefab == Entity.Null)
+            largeBulletEntityPrefab = BulletPrefabSystem.GetLargeBulletPrefab();
+
+        FireBullet();
     }
 
     private void FireBullet()
     { 
-        // Make sure references are assigned (Cant be done in start, then returns null).
-        if (smallBulletEntityPrefab == Entity.Null)
-            smallBulletEntityPrefab = BulletPrefabSystem.GetSmallBulletPrefab();
-        
-        if (largeBulletEntityPrefab == Entity.Null)
-            largeBulletEntityPrefab = BulletPrefabSystem.GetLargeBulletPrefab();
-
         if (useECSBullet)
         {
             float maxBulletLifetime = 0;
