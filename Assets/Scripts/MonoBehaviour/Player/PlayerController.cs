@@ -6,6 +6,7 @@ using Unity.Transforms;
 using TMPro;
 using Unity.Mathematics;
 using Unity.Physics;
+using System.Runtime.CompilerServices;
 
 public class PlayerController : MonoBehaviour
 {
@@ -56,13 +57,17 @@ public class PlayerController : MonoBehaviour
 
         if (useECSBullet)
         {
+            float maxBulletLifetime = 0;
+
             switch (selectedBulletPrefab)
             {
                 case CurrentBullet.SmallBullet:
                     currentSelection = smallBulletEntityPrefab;
+                    maxBulletLifetime = smallBulletData.Lifetime;
                     break;
                 case CurrentBullet.LargeBullet:
                     currentSelection = largeBulletEntityPrefab;
+                    maxBulletLifetime = largeBulletData.Lifetime;
                     break;
                 default:
                     break;
@@ -73,6 +78,7 @@ public class PlayerController : MonoBehaviour
 
             entityManager.SetComponentData(bullet, new MoveForwardComponent { Speed = smallBulletData.Speed });
             entityManager.SetComponentData(bullet, new LocalTransform { Position = firepointTransform.Position, Rotation = firepointTransform.Rotation, Scale = 1 }); ;
+            entityManager.SetComponentData(bullet, new LifetimeComponent { CurrentLifeTime = 0, MaxLifeTime = maxBulletLifetime } ); ;
 
             entityManager.SetEnabled(bullet, true);
         }
