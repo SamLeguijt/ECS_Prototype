@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed;
-    public float x;
+    [SerializeField] private Transform visualsParent = null;
+    [SerializeField] private float speed;
+    [SerializeField] private LayerMask layerMask = new LayerMask();
 
     private Vector3 stepDirection;
     private float stepSize;
 
     private Vector3 prevPosition;
 
-    [SerializeField] private LayerMask layerMask = new LayerMask();
 
     private void Update()
     {
@@ -25,11 +25,19 @@ public class Bullet : MonoBehaviour
         transform.Translate(speed * Time.deltaTime * transform.forward, Space.World);
     }
 
+    public void Init(BulletData data)
+    {
+        this.speed = data.Speed;
+        this.layerMask = data.CollisionLayers;
+    }
 
     private void CalculateCollision()
     {
         stepDirection = transform.forward.normalized;
         stepSize = (transform.position - prevPosition).magnitude;
+
+        // TODO: Fix rotation.
+        visualsParent.rotation = Quaternion.Euler(new Vector3(90,0,0));
 
 #if UNITY_EDITOR || UNITY_DEBUG
         Debug.DrawRay(prevPosition, stepDirection * stepSize, Color.red);

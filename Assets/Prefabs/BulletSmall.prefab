@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c90584f581796ca45aa583c7e4ae4566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visualsParent: {fileID: 1771856344958138655}
   speed: 25
-  x: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 0
