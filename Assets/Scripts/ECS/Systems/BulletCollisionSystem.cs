@@ -6,6 +6,7 @@ using Unity.Physics;
 using Unity.Collections;
 using Unity.Transforms;
 using RaycastHit = Unity.Physics.RaycastHit;
+using Unity.VisualScripting;
 
 /// <summary>
 /// System that handles collision between Bullet entities and other Entities. 
@@ -33,6 +34,7 @@ public partial class BulletCollisionSystem : SystemBase
         // Might seem expensive, but is the way to go and not so expensive as you might think (source: trust me bro).
         var physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld;
         var collisionResults = new NativeList<CollisionResult>(Allocator.TempJob);
+        var ECB = new EntityCommandBuffer(Allocator.TempJob);
 
         // Implicit job execution.
         Entities
@@ -114,12 +116,33 @@ public partial class BulletCollisionSystem : SystemBase
 
                 }
 
+                // 'Normal' Raycast for GameObject hit detection.
+                UnityEngine.Ray ray = new UnityEngine.Ray { origin = rayInput.Start, direction = rayInput.End };
+
+                // TODO: 
+                // Would be more efficient if a seperate system would fire the Physics.Raycasts for GO detection, using the pos and direction of the bullet entities. 
+                // Then this can be a Job again while still detecting GO collision for bullets.
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hitinfo, Vector3.Distance(rayInput.Start, rayInput.End), (int)CollisionLayersEnum.Environment))
+                {
+                    Debug.Log("ECS bullet hits Environment GameObject.");
+
+                    ECB.DestroyEntity(entity);
+                }
+
                 rayHits.Dispose();
             })
-            .WithReadOnly(physicsWorld)
-            .Schedule();
+            .WithoutBurst()
+            .Run();
 
+        // TODO: Finish the Entities.ForEach with these extensions instead of .WithoutBurst and .Run
+        //.WithReadOnly(physicsWorld)
+        //.Schedule();
         Dependency.Complete();
+
+        // TODO: ECB can be removed from here if GO detection is in seperate class.
+        ECB.Playback(EntityManager);
+        ECB.Dispose();
+
 
         for (int i = 0; i < collisionResults.Length; i++)
         {
@@ -130,7 +153,6 @@ public partial class BulletCollisionSystem : SystemBase
         collisionResults.Dispose();
     }
 
-
     private void ProcessCollision(Entity bullet, RaycastHit hit, RigidBody body)
     {
         Entity entityCollided = body.Entity;
@@ -138,6 +160,7 @@ public partial class BulletCollisionSystem : SystemBase
         CollisionLayersEnum collidedLayer = GetLayerFromIndex(hitCollisionFilter.BelongsTo);
 
         OnECSBulletCollisionEvent?.Invoke(bullet, body, hit, collidedLayer);
+
 
         // We can process the collision in multiple ways, here are two examples: 
 

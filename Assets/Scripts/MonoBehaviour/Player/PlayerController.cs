@@ -60,7 +60,6 @@ public class PlayerController : MonoBehaviour
 
     private void FireBullet(int firepointIndex)
     {
-        Debug.Log("Bullet");
         if (useECSBullet)
         {
             float maxBulletLifetime = 0;
