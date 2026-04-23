@@ -1,0 +1,120 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.Entities;
+using Unity.Transforms;
+using TMPro;
+using Unity.Mathematics;
+using Unity.Physics;
+using System.Runtime.CompilerServices;
+
+public class PlayerController : MonoBehaviour
+{
+    [Header("Settings")]
+    [SerializeField] private CurrentBullet selectedBulletPrefab;
+    [SerializeField] private bool useECSBullet = true;
+
+    [Header("References")]
+    [SerializeField] private Transform firePoint = null;
+    [SerializeField] private List<Transform> firepoints;
+
+    [Header("Bullet references")]
+    [SerializeField] private GameObject smallBulletPrefab = null;
+    [SerializeField] private GameObject largeBulletPrefab = null;
+    [SerializeField] private BulletData smallBulletData = null;
+    [SerializeField] private BulletData largeBulletData = null;
+
+    EntityManager entityManager;
+    Entity firepointEntity;
+
+    Entity smallBulletEntityPrefab;
+    Entity largeBulletEntityPrefab;
+    Entity currentSelection;
+
+    private void Start()
+    {
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+        firepointEntity = entityManager.CreateEntity(typeof(LocalTransform), typeof(MirrorGameObjectComponent), typeof(EntityCustomNameComponent));
+        entityManager.SetComponentData(firepointEntity, new MirrorGameObjectComponent { TargetGameObject = firePoint.gameObject, ObjectMirrorsEntity = false });
+        entityManager.SetComponentData(firepointEntity, new EntityCustomNameComponent { Name = "FirepointEntity" });
+    }
+
+    public void Fire(int bulletAmount)
+    {
+        // Make sure references are assigned (Cant be done in start, then returns null).
+        if (smallBulletEntityPrefab == Entity.Null)
+            smallBulletEntityPrefab = BulletPrefabSystem.GetSmallBulletPrefab();
+
+        if (largeBulletEntityPrefab == Entity.Null)
+            largeBulletEntityPrefab = BulletPrefabSystem.GetLargeBulletPrefab();
+
+        for (int i = 0; i < bulletAmount; i++)
+        {
+            if (i >= firepoints.Count)
+                break;
+
+            FireBullet(i);
+        }
+    }
+
+    private void FireBullet(int firepointIndex)
+    {
+        if (useECSBullet)
+        {
+            float maxBulletLifetime = 0;
+
+            switch (selectedBulletPrefab)
+            {
+                case CurrentBullet.SmallBullet:
+                    currentSelection = smallBulletEntityPrefab;
+                    maxBulletLifetime = smallBulletData.Lifetime;
+                    break;
+                case CurrentBullet.LargeBullet:
+                    currentSelection = largeBulletEntityPrefab;
+                    maxBulletLifetime = largeBulletData.Lifetime;
+                    break;
+                default:
+                    break;
+            }
+
+            Entity bullet = entityManager.Instantiate(currentSelection);
+            LocalTransform firepointTransform = entityManager.GetComponentData<LocalTransform>(firepointEntity);
+
+            entityManager.SetComponentData(bullet, new MoveForwardComponent { Speed = smallBulletData.Speed });
+            entityManager.SetComponentData(bullet, new LocalTransform { Position = firepoints[firepointIndex].position, Rotation = firepointTransform.Rotation, Scale = 1 }); ;
+            entityManager.SetComponentData(bullet, new LifetimeComponent { CurrentLifeTime = 0, MaxLifeTime = maxBulletLifetime }); ;
+
+            entityManager.SetEnabled(bullet, true);
+        }
+        else
+        {
+            // TODO: Fix normal bullet rotation.
+
+            GameObject bulletObject;
+            Bullet bullet;
+
+            switch (selectedBulletPrefab)
+            {
+                case CurrentBullet.SmallBullet:
+                    bulletObject = Instantiate(smallBulletPrefab, firePoint.position, firePoint.rotation);
+                    bullet = bulletObject.GetComponent<Bullet>();
+                    bullet.Init(smallBulletData);
+                    break;
+                case CurrentBullet.LargeBullet:
+                    bulletObject = Instantiate(largeBulletPrefab, firePoint.position, firePoint.rotation);
+                    bullet = bulletObject.GetComponent<Bullet>();
+                    bullet.Init(largeBulletData);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private enum CurrentBullet
+    {
+        SmallBullet,
+        LargeBullet
+    }
+}

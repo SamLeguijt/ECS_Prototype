@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a883babfd9158c498b4a9669d5d313c, type: 3}
+  m_Name: PistolSettings_CollisionECS
+  m_EditorClassIdentifier: 
+  ItemType: 1
+  triggerPressFireValue: 0.8
+  minTriggerValueForReleaseValue: 0.6
+  roundsPerMinute: 480
+  bulletPrefab: {fileID: 8946891300710890065, guid: 6df5fcc8afc1fda44883227103eac4d0,
+    type: 3}
+  useHeat: 0
+  shotsToOverheat: 10
+  heatCooldownDelay: 1
+  heatDegeneration: 0.1
+  overHeatCooldown: 3
+  overHeatDegeneration: 0.2
+  heatRPMModifier: 0.9
+  useWeaponSpread: 0
+  weaponSpread: 0
+  timeTillMaxSpread: 0
+  timeTillSpreadIncrease: 0
+  timeTillSpreadDecay: 0
+  amountTimeSpreadDecay: 0
+  useHeatForWeaponSpread: 0
+  usePelletSpread: 0
+  amountPellets: 1
+  amountPelletsWhenCharged: 1
+  pelletSpreadWhenCharged: 0
+  pelletSpread: 0
+  weaponDamage: 25
+  damageFallOffMultiplier: 1
+  damageFallOffRange: {x: 0, y: 1}
+  hapticsCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.3
+      value: 1
+      inSlope: -0.035029255
+      outSlope: -0.035029255
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.29648113
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2.115752
+      outSlope: -2.115752
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18257946
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hapticsDuration: 0.6
+  maxRecoil01: 0.4
+  recoilGainedPerSecond: 20
+  recoilGainedPerSecondCharged: 40
+  recoilRecoveryPerSecond: 1.6
